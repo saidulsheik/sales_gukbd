@@ -323,23 +323,28 @@ class Receive extends Admin_Controller
 				redirect('dashboard', 'refresh');
 			}
 			$this->data['page_title'] = 'Product Purchase';
-			
-			/* echo '<pre>';
-			print_r($_POST);
-			echo '</pre>';
-			exit; */
-			
-			if(!empty($this->input->post('detailinformation'))){
-				$detailsArray=$this->input->post('detailinformation');
-				$updateArray=array();
-				for($i=0; $i<count($detailsArray); $i++){
-					$row_arr=json_decode($detailsArray[$i]);
-					array_push($updateArray,$row_arr);
+			$serial_no=$this->input->post("serial_no");
+			$productArray=$this->input->post("product");
+			$productWithSerialArray=array();
+			$i=0;
+			foreach($productArray as $product){
+				if(!empty($serial_no[$i])){
+					$product['product_serial']=$serial_no[$i];
+					array_push($productWithSerialArray,$product);
 				}
-				$this->db->update_batch('purchase_details', $updateArray, 'id'); 
+				$i++;
 			}
+
 			
-			
+ 
+			echo '<pre>';
+			print_r($productWithSerialArray);
+			echo '</pre>'; 
+/*
+			echo '<pre>';
+			print_r($_POST);
+			echo '</pre>'; 
+			 */
 
 		}
 
@@ -349,13 +354,8 @@ class Receive extends Admin_Controller
 			if(!in_array('deleteProduct', $this->permission)) {
 				redirect('dashboard', 'refresh');
 			}
-			
-			/* echo '<pre>';
-			print_r($_POST);
-			echo '</pre>';
-			exit; */
 			$purchase_details_id = $this->input->post('purchase_details_id');
-			$is_serialised = $this->input->post('is_serialised');
+			$serial_no = $this->input->post('serial_no');
 			$purchase_id = $this->input->post('purchase_id');
 
 			$countPurchaseDetailsData=$this->db->query("SELECT COUNT(*) AS total_row FROM purchase_details WHERE purchase_id=$purchase_id GROUP BY purchase_id")->row();
@@ -363,7 +363,7 @@ class Receive extends Admin_Controller
 			if($countPurchaseDetailsData->total_row>1){
 				if(!empty($purchase_details_id)){
 						$response = array();
-						$delete = $this->model_receive->deletePurchaseDetailsByID($purchase_details_id,$is_serialised);
+						$delete = $this->model_receive->deletePurchaseDetailsByID($purchase_details_id);
 						if($delete == true) {
 						$response['success'] = true;
 							$response['messages'] = "Successfully removed";
