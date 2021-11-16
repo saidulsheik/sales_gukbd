@@ -46,7 +46,7 @@
 		  color:red;
 	  }
 </style>
-
+<?php  date_default_timezone_set('Asia/Dhaka'); ?>
 	<!-- Content Wrapper. Contains page content -->
 	<div class="content-wrapper">
 		<!-- Content Header (Page header) -->
@@ -78,7 +78,7 @@
 					</div>
 					<?php endif; ?> -->
 
-				<form role="form" action="<?php echo base_url('receive/createPurchase') ?>"  method="post" id="createPurchaseForm" class="form" onsubmit="return ValidationEvent()">>
+				<form role="form" action="<?php echo base_url('receive/createPurchase') ?>"  method="post" id="createPurchaseForm" class="form" onsubmit="return ValidationEvent()">
 						
 					<div class="box box-primary">
 						<div class="box-header">
@@ -98,8 +98,9 @@
 									if(!empty($temp_purchase[0]['vendor_id'])){
 								?>
 									<input type="text" class="form-control" name="vendor_name" value="<?php echo $temp_purchase[0]['vendor_name'];?>" readonly>
-									<input type="text" name="vendor_id" value="<?php echo $temp_purchase[0]['vendor_id']; ?>">
-									<input type="text" name="id" value="<?php echo $temp_purchase[0]['id']; ?>">
+									<input type="hidden" name="vendor_id" value="<?php echo $temp_purchase[0]['vendor_id']; ?>">
+									<!-- this id need for product add-->
+									<input type="hidden" name="id" value="<?php echo $temp_purchase[0]['id']; ?>">
 								<?php 
 									}else{
 								?>
@@ -117,24 +118,16 @@
 									<option value="">No Supplier Created</option>
 									<?php } ?>
 								</select>
-								
 								<span class="error"><?php echo form_error('vendor_id'); ?></span>
 								<?php } ?>
 							</div>
 							<div class="form-group col-sm-4">
 								<label for="chalan_no" class="col-sm-5 control-label">Supplier Invoice/Challan No</label>
-								<?php 
-									if(!empty($temp_purchase[0]['chalan_no'])){
-								?>
+								<?php if(!empty($temp_purchase[0]['chalan_no'])){?>
 									<input type="text" class="form-control" id="chalan_no"   name="chalan_no" value="<?php echo $temp_purchase[0]['chalan_no']; ?>" readonly placeholder="Enter Challan No"  autocomplete="Off">
-								<?php 
-									}else{
-
-								?>
+								<?php }else{ ?>
 									<input type="text" class="form-control" id="chalan_no"   name="chalan_no" placeholder="Enter Challan No"  autocomplete="Off">
-								<?php 
-									}
-								?>
+								<?php } ?>
 								
 								<span class="error"><?php echo form_error('chalan_no'); ?></span>
 								<input type="hidden" name="is_serialised" id="is_serialised">
@@ -142,35 +135,21 @@
 
 							<div class="form-group col-sm-4">
 								<label for="challan_date" class="col-sm-5 control-label">Supplier Invoice/Challan Date</label>
-								<input type="date" name="challan_date" id="challan_date" value=""  class="form-control">
+								<?php if(!empty($temp_purchase)){ ?>
+								<input type="date" name="challan_date" id="challan_date" value="<?php echo $temp_purchase[0]['challan_date']; ?>"  readonly class="form-control">
+								
+								<?php }else{ ?>
+								<input type="date" name="challan_date" id="challan_date" value="<?php echo date("Y-m-d"); ?>"  class="form-control">
+								<?php }	?>
 								<span class="error"><?php echo form_error('challan_date'); ?></span>
 							</div>
 						</div> 
 						
-							<?php 
-								if(!empty($temp_purchase)){
-								?>
+								<?php if(!empty($temp_purchase)){ ?>
 									<input type="hidden" name="receive_date" value="<?php echo $temp_purchase[0]['receive_date']; ?>">
-									<input type="hidden" name="challan_date" value="<?php echo $temp_purchase[0]['challan_date']; ?>">
-									
-								<?php 
-									}else{
-								?>
+								<?php }else{ ?>
 									<input type="hidden" name="receive_date" value="<?php echo date('Y-m-d'); ?>">
-								<?php 
-								}	
-									/* echo '<pre>';
-									print_r($temp_purchase);
-									echo '</pre>';  */
-							?>
-
-
-
-						<?php 
-						// echo '<pre>';
-						// print_r($temp_purchase_details);
-						// echo '</pre>';
-						?>
+								<?php } ?>
 						<table class="table table-bPurchaseed" id="product_info_table">
 							<thead>
 								<tr>
@@ -240,7 +219,8 @@
 					var challan_date = document.getElementById("challan_date").value = "<?php echo isset($temp_purchase[0]['challan_date']) ? $temp_purchase[0]['challan_date'] : date('Y-m-d'); ?>";
 					var in_buy_id = "<?php echo isset($temp_purchase[0]['id']) ? $temp_purchase[0]['id'] : ''; ?>";
 					if(vendor_id) {
-						$('#vendor_id').attr("readonly", true); 
+						//$('#vendor_id').attr("readonly", true); 
+						$('#vendor_id').css('pointer-events','none');
 						//$('#vendor_id').css('pointer-events','none').attr("readonly","true");
 						// $('#vendor_id').css('pointer-events','none').attr("readonly","true");
 					}
@@ -304,41 +284,41 @@
 										<tr>
 											<td><?php echo $detailsValue['brand_name']; ?></td>
 											<td><?php echo $detailsValue['category_name']; ?></td>
-											<td>
-												<?php echo $detailsValue['product_name']; ?>
-												<input type="hidden" name="product[<?php echo $detailsValue['id']; ?>][purchase_detail_id]" value="<?php echo $detailsValue['id']; ?>" />
-												<input type="hidden" name="product[<?php echo $detailsValue['id']; ?>][product_id]" value="<?php echo $detailsValue['product_id']; ?>" />
-												
-											</td>
+											<td><?php echo $detailsValue['product_name']; ?></td>
 											<?php 
-
 											if($detailsValue['is_serialised']==1){
+												$this->CI =& get_instance();
+												$sql="SELECT * from products_serial WHERE purch_details_id=?";
+												$query = $this->CI->db->query($sql, array($detailsValue['id']));
+												$result = $query->row();
+												
 											?>
 											<td>
-												<input type="text" name="serial_no[]" id="serial_no<?php echo $i;?>" tabindex="<?php echo $i;?>" class="form-control serial_no" required>
+											<?php $detailInformation=array('id'=>$detailsValue['id'],'product_serial_id'=>$result->id); ?>
+											<input type="hidden" name="detailinformation[]" value='<?php echo json_encode($detailInformation); ?>'>
+											<?php echo $result->product_serial;?>
 											</td>
-											<?php 
-											}else{
-											?>
-												<td><input type="text" name="serial_no[]" class="form-control serial_no" tabindex="<?php echo $i;?>" readonly></td>
-											<?php 
-											}
-											?>
+											<?php }else{ ?>
+											<td>Not Applicable</td>
+											<?php } ?>
 
 											<td><?php echo $detailsValue['purchase_price']; ?></td>
 											<td><?php echo $detailsValue['quantity']; ?></td>
 											<td><?php echo $detailsValue['quantity']*$detailsValue['purchase_price']; ?></td>
 											<td>
+											<?php 
+												$purchDetailsData=array();
+												
+												$purchDetailsData=array(
+													'purchase_id'=>$detailsValue['purchase_id'],
+													'purchase_details_id'=>$detailsValue['id'],
+													'is_serialised'=>$detailsValue['is_serialised']
+												);
+												
+											?>
+											<input type="hidden" id="purchDetailsData_<?php echo $i; ?>" value='<?php echo json_encode($purchDetailsData);?>'>
 												<?php if(in_array('deleteProduct', $this->permission)) { ?>
-												<a id="remevoserial"
-													class="btn btn-sm btn-danger"
-													data-purchase_id="<?php echo $detailsValue['purchase_id'];?>"
-													data-id="<?php echo $detailsValue['id']; ?>" 
-													data-option="<?php echo $detailsValue['serial_id']; ?>" 
-													href="#" 
-													onclick="goDoSomething(this.getAttribute('data-id'), this.getAttribute('data-option'), this.getAttribute('data-purchase_id'));">
-														<i class="fa fa-times" aria-hidden="true"></i>
-												</a>
+												<a id="remevoserial" class="btn btn-sm btn-danger" href="#" onclick="goDoSomething(<?php echo $i; ?>);"><i class="fa fa-times" aria-hidden="true"></i></a>
 												<?php }	?>
 											</td>
 										</tr>
@@ -373,25 +353,16 @@
    $('#is_serialised')
   
   $('#serial_1').on('change', function(){ 
-	  
-	   //alert(no_of_serial);
 	   var qty=$("#quantity_1").val();
-	    var no_of_serial = $("#serial_1").tagsinput('items').length;
-		
+	   var no_of_serial = $("#serial_1").tagsinput('items').length;
 	   $("#no_of_serial_no").html("Number of Product Serial must be equal to product quantity, given serial no : "+ no_of_serial);
 	   if(qty<no_of_serial){
+	   	var tag = $("#serial_1").tagsinput('items');
+		alert(tag);
 		   alert("Product Serial No Can't greater than product Qty");
-		 	//$("#serial_1").val('');
-			//$('#serial_1').tagsinput('remove',);
-			$('#serial_1').tagsinput('removeAll');
+			return false;
 		}
-	   /* price = ''
-	   if (items == 1){
-		   price = 100;
-	   }else{
-		   price = parseInt(items)*70;
-	   }
-	   $('#totalpay').val(price) */
+	   
 	});
   
   
@@ -473,14 +444,14 @@
   }
 
   //remove functions 
-  function goDoSomething(data_id, data_option,purchase_id){ 
-      //alert(data_option);
+  function goDoSomething(row_id){ 
+		var purchDetailsData=JSON.parse($("#purchDetailsData_"+row_id).val());
 			var x = confirm("Are you sure  want to delete?");
 			if(x){
 				$.ajax({
 				url : "<?php echo base_url(); ?>/receive/deletePurchaseDetailsByID",
 				type : "POST",
-				data : {"purchase_details_id" : data_id, "serial_no" : data_option, "purchase_id" : purchase_id},
+				data : {"purchase_details_id" : purchDetailsData.purchase_details_id, "is_serialised" : purchDetailsData.is_serialised, "purchase_id" : purchDetailsData.purchase_id},
 				dataType: 'json',
 				success : function(response) {
           			console.log(response);

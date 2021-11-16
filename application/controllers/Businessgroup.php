@@ -2,37 +2,35 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Category extends Admin_Controller 
+class Businessgroup extends Admin_Controller 
 {
 	public function __construct(){
 		parent::__construct();
 		$this->not_logged_in();
-		$this->data['page_title'] = 'Category';
-		$this->load->model('model_category');
+		$this->data['page_title'] = 'Business Group';
 		$this->load->model('model_businessgroup');
 	}
 
 	/* 
-	* It only redirects to the manage category page
+	* It only redirects to the manage Business Group page
 	*/
 	public function index(){
-		if(!in_array('viewCategory', $this->permission)) {
+		if(!in_array('viewBusinessGroup', $this->permission)) {
 			redirect('dashboard', 'refresh');
 		}
-		$this->data['businessGroups'] =$this->model_businessgroup->getActiveBusinessGroup();
-		$this->render_template('category/index', $this->data);	
+		$this->render_template('businessgroup/index', $this->data);	
 	}	
 
 	/*
-	* It checks if it gets the category id and retreives
-	* the category information from the category model and 
+	* It checks if it gets the Business Group id and retreives
+	* the Business Group information from the Business Group model and 
 	* returns the data into json format. 
 	* This function is invoked from the view page.
 	*/
-	public function fetchCategoryDataById($id) 
+	public function fetchBusinessGroupById($id) 
 	{
 		if($id) {
-			$data = $this->model_category->getCategoryData($id);
+			$data = $this->model_businessgroup->getBusinessGroup($id);
 			echo json_encode($data);
 		}
 
@@ -40,14 +38,14 @@ class Category extends Admin_Controller
 	}
 
 	/*
-	* Fetches the category value from the category table 
+	* Fetches the Business Group value from the Business Group table 
 	* this function is called from the datatable ajax function
 	*/
-	public function fetchCategoryData()
+	public function fetchBusinessGroupData()
 	{
 		$result = array('data' => array());
 
-		$data = $this->model_category->getCategoryData();
+		$data = $this->model_businessgroup->getBusinessGroup();
 
 		foreach ($data as $key => $value) {
 
@@ -57,16 +55,12 @@ class Category extends Admin_Controller
 			if(in_array('updateCategory', $this->permission)) {
 				$buttons .= '<button type="button" class="btn btn-default" onclick="editFunc('.$value['id'].')" data-toggle="modal" data-target="#editModal"><i class="fa fa-pencil"></i></button>';
 			}
-
 			if(in_array('deleteCategory', $this->permission)) {
 				$buttons .= ' <button type="button" class="btn btn-default" onclick="removeFunc('.$value['id'].')" data-toggle="modal" data-target="#removeModal"><i class="fa fa-trash"></i></button>';
 			}
-				
-
 			$status = ($value['status'] == 1) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
 
 			$result['data'][$key] = array(
-				$value['category_name'],
 				$value['group_name'],
 				$status,
 				$buttons
@@ -77,28 +71,30 @@ class Category extends Admin_Controller
 	}
 
 	/*
-	* Its checks the category form validation 
+	* Its checks the Business Group form validation 
 	* and if the validation is successfully then it inserts the data into the database 
 	* and returns the json format operation messages
 	*/
 	public function create()
 	{
-		if(!in_array('createCategory', $this->permission)) {
+		if(!in_array('createBusinessGroup', $this->permission)) {
 			redirect('dashboard', 'refresh');
 		}
 
 		$response = array();
-		$this->form_validation->set_rules('category_name', 'Category Name', 'trim|required|is_unique[categories.category_name]');
-		$this->form_validation->set_rules('group_code', 'group_code', 'trim|required');
-		$this->form_validation->set_rules('status', 'status', 'trim|required');
+
+		$this->form_validation->set_rules('group_name', 'Group Name', 'trim|required|is_unique[tbl_group_head.group_name]');
+		$this->form_validation->set_rules('status', 'Status', 'trim|required');
+
 		$this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
+
         if ($this->form_validation->run() == TRUE) {
         	$data = array(
-        		'category_name' => $this->input->post('category_name'),
-        		'group_code' => $this->input->post('group_code'),
+        		'group_name' => $this->input->post('group_name'),
         		'status' => $this->input->post('status'),	
         	);
-        	$create = $this->model_category->create($data);
+
+        	$create = $this->model_businessgroup->create($data);
         	if($create == true) {
         		$response['success'] = true;
         		$response['messages'] = 'Succesfully created';
@@ -119,37 +115,34 @@ class Category extends Admin_Controller
 	}
 
 	/*
-	* Its checks the category form validation 
+	* Its checks the Business Group form validation 
 	* and if the validation is successfully then it updates the data into the database 
 	* and returns the json format operation messages
 	*/
 	public function update($id)
 	{
 
-		if(!in_array('updateCategory', $this->permission)) {
+		if(!in_array('updateBusinessGroup', $this->permission)) {
 			redirect('dashboard', 'refresh');
 		}
 
 		$response = array();
 
 		if($id) {
-			if(trim($this->input->post('edit_category_name')) != trim($this->input->post('old_category_name'))){
-				$this->form_validation->set_rules('edit_category_name', 'Category Name', 'trim|required|is_unique[categories.category_name]');
+			if(trim($this->input->post('edit_group_name')) != trim($this->input->post('old_group_name'))){
+				$this->form_validation->set_rules('edit_group_name', 'Group Name', 'trim|required|is_unique[tbl_group_head.group_name]');
 			} else {
-				$this->form_validation->set_rules('edit_category_name', 'Category Name', 'trim|required');
+				$this->form_validation->set_rules('edit_group_name', 'Group Name', 'trim|required');
 			}
-			$this->form_validation->set_rules('edit_group_code', 'group_code', 'trim|required');
 			$this->form_validation->set_rules('edit_status', 'Status', 'trim|required');
 			$this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
-
 	        if ($this->form_validation->run() == TRUE) {
 	        	$data = array(
-					'category_name' => $this->input->post('edit_category_name'),
-					'group_code' => $this->input->post('edit_group_code'),
-					'status' => $this->input->post('edit_status'),	
-				);
+	        		'group_name' => $this->input->post('edit_group_name'),
+	        		'status' => $this->input->post('edit_status'),	
+	        	);
 
-	        	$update = $this->model_category->update($data, $id);
+	        	$update = $this->model_businessgroup->update($data, $id);
 	        	if($update == true) {
 	        		$response['success'] = true;
 	        		$response['messages'] = 'Succesfully updated';
@@ -175,7 +168,7 @@ class Category extends Admin_Controller
 	}
 
 	/*
-	* It removes the category information from the database 
+	* It removes the Business Group information from the database 
 	* and returns the json format operation messages
 	*/
 	public function remove()
@@ -188,7 +181,7 @@ class Category extends Admin_Controller
 
 		$response = array();
 		if($category_id) {
-			$delete = $this->model_category->remove($category_id);
+			$delete = $this->model_businessgroup->remove($category_id);
 			if($delete == true) {
 				$response['success'] = true;
 				$response['messages'] = "Successfully removed";	

@@ -46,7 +46,8 @@
 							<th>Price To Date</th>
 							<th>Purchase Price</th>
 							<th>Sales Price</th>
-							
+							<th>Down Payment</th>
+							<th>Loan Amount</th>
 							<th>Incentive Amount</th>
 						</tr>
 					</thead>
@@ -72,7 +73,8 @@
 								<td><?php echo $value->price_to;?></td>
 								<td><?php echo $value->purchase_price;?></td>
 								<td><?php echo $value->sales_price;?></td>
-								
+								<td><?php echo $value->down_payment;?></td>
+								<td><?php echo $value->loan_amount;?></td>
 								<td><?php echo $value->incentive_amt;?></td>
 							</tr>
 						<?php 
@@ -84,6 +86,8 @@
 								<td><?php echo $value->price_to;?></td>
 								<td><?php echo $value->purchase_price;?></td>
 								<td><?php echo $value->sales_price;?></td>
+								<td><?php echo $value->down_payment;?></td>
+								<td><?php echo $value->loan_amount;?></td>
 								<td><?php echo $value->incentive_amt;?></td>
 							</tr>
 						<?php 

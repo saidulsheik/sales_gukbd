@@ -99,8 +99,27 @@
 			<form role="form" action="<?php base_url('products/create') ?>" method="post" enctype="multipart/form-data">
 				<div class="box-body">
 					<div class="row">
-					
-						<div class="col-sm-4 col-md-4">
+						<div class="col-sm-3 col-md-3">
+							<label for="group_code">Product Group <span class="error">*</span></label>
+							<select class="form-control select_group" id="group_code" name="group_code">
+								<option value="">Select Product Group</option>
+								<?php foreach ($group_code as $k => $v): ?>
+								  <option value="<?php echo $v['id'] ?>" <?php echo set_select('group_code', $v['id']);?> ><?php echo $v['group_name'] ?></option>
+								<?php endforeach ?>
+							</select>
+							<span class="error"><?php echo form_error('group_code'); ?></span>
+						</div>
+						<div class="col-sm-3 col-md-3">
+							<label for="brand_id">Brands <span class="error">*</span></label>
+							<select class="form-control select_group" id="brand_id" name="brand_id">
+								<option value="">Select Brand</option>
+								<?php foreach ($brand_id as $k => $v): ?>
+								  <option value="<?php echo $v['id'] ?>" <?php echo set_select('brand_id', $v['id']);?> ><?php echo $v['brand_name'] ?></option>
+								<?php endforeach ?>
+							</select>
+							<span class="error"><?php echo form_error('brand_id'); ?></span>
+						</div>
+						<div class="col-sm-3 col-md-3">
 							<label for="category_id">Category <span class="error">*</span></label>
 							<select class="form-control select_group" id="category_id" name="category_id">
 								<option value="">Select Category</option>
@@ -111,39 +130,45 @@
 							<span class="error"><?php echo form_error('category_id'); ?></span>
 						</div>
 						
-						<div class="col-sm-4 col-md-4">
-							<label for="brand_id">Brands <span class="error">*</span></label>
-							<select class="form-control select_group" id="brand_id" name="brand_id">
-								<option value="">Select Brand</option>
-								<?php foreach ($brand_id as $k => $v): ?>
-								  <option value="<?php echo $v['id'] ?>" <?php echo set_select('brand_id', $v['id']);?> ><?php echo $v['brand_name'] ?></option>
-								<?php endforeach ?>
-							</select>
-							<span class="error"><?php echo form_error('brand_id'); ?></span>
-						</div>
-
-						<div class="col-sm-4">
-							<div class="form-group">	
-								<label for="product_model">Product Model <span class="error">*</span></label>
-								<input type="text" class="form-control" id="product_model" name="product_model" value="<?php echo set_value('product_model'); ?>" placeholder="Enter Model" autocomplete="off" />
-								<span class="error"><?php echo form_error('product_model'); ?></span>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-4 col-md-4">
+						<div class="col-sm-3 col-md-3">
 							<div class="form-group">	
 								<label for="product_name">Product name <span class="error">*</span></label>
 								<input type="text" class="form-control" id="product_name" name="product_name" value="<?php echo set_value('product_name'); ?>" placeholder="Enter product name" autocomplete="off"/>
 								<span class="error"><?php echo form_error('product_name'); ?></span>
 							</div>
 						</div>
-
 						
+					</div>
+					<div class="row">
+						<div class="col-sm-3 col-md-3">
+							<label for="vendor_id">Vendor <span class="error">*</span></label>
+							<select class="form-control select_group" id="vendor_id" name="vendor_id">
+								<option value="">Select Vendor</option>
+								<?php foreach ($vendor_id as $k => $v): ?>
+								  <option value="<?php echo $v['id'] ?>" <?php echo set_select('vendor_id', $v['id']);?> ><?php echo $v['vendor_name'] ?></option>
+								  <?php endforeach ?>
+							</select>
+							<span class="error"><?php echo form_error('vendor_id'); ?></span>
+							
+						</div>
 						
+						<div class="col-sm-3">
+							<div class="form-group">	
+								<label for="product_short_name">Short Name <span class="error">*</span></label>
+								<input type="text" class="form-control" id="product_short_name"  name="product_short_name" value="<?php echo set_value('product_short_name'); ?>" placeholder="Enter product short name" autocomplete="off"/>
+								<span class="error"><?php echo form_error('product_short_name'); ?></span>
+							</div>
+						</div>
 						
+						<div class="col-sm-3">
+							<div class="form-group">	
+								<label for="product_model">Product Model <span class="error">*</span></label>
+								<input type="text" class="form-control" id="product_model" name="product_model" value="<?php echo set_value('product_model'); ?>" placeholder="Enter Model" autocomplete="off" />
+								<span class="error"><?php echo form_error('product_model'); ?></span>
+							</div>
+						</div>
 						
-						<div class="col-sm-4 col-md-4">
+						<div class="col-sm-3 col-md-3">
 							<label for="is_serialised">Is Serialised? <span class="error">*</span></label>
 							<select class="form-control" id="is_serialised" name="is_serialised">
 								<option value="1">Yes</option>
@@ -151,9 +176,38 @@
 							</select>
 							<span class="error"><?php echo form_error('is_serialised'); ?></span>
 						</div>
+						
+						<!--div class="col-sm-3">
+							<div class="form-group">	
+								<label for="product_code">Product Code</label>
+								<input type="text" class="form-control" id="product_code" name="product_code" placeholder="Enter product code" autocomplete="off"/>
+							</div>
+						</div-->
+						
+						<!--div class="col-sm-3">
+							<div class="form-group">	
+								<label for="product_name">For Office Sale</label>
+								<input type="text" class="form-control" id="product_name" name="product_name" placeholder="Enter product name" autocomplete="off"/>
+							</div>
+						</div-->
 					</div>
 					
-					
+					<div class="row">
+						<div class="col-sm-3">
+							<div class="form-group">	
+								<label for="reorder_level">Stock Alert Level </label>
+								<input type="text" class="form-control" id="reorder_level" name="reorder_level" value="<?php echo set_value('reorder_level'); ?>" placeholder="Enter Stock Alert Level" autocomplete="off"/>
+								<span class="error"><?php echo form_error('reorder_level'); ?></span>
+							</div>
+						</div>
+						
+						<div class="col-sm-6">
+							<div class="form-group">	
+								<label for="product_color">Product Color </label>
+								<input type="text" class="form-control" id="product_color" name="product_color" data-role="tagsinput" value="<?php echo set_value('tagsinput'); ?>" placeholder="Type Color Name and Enter" autocomplete="off"/>
+							</div>
+						</div>
+					</div>
 					
 					<div class="row">
 						<div class="col-sm-12">

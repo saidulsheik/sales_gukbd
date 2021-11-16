@@ -234,9 +234,7 @@ var manageTable;
 
 $(document).ready(function() {
 
-	
-	$("#mainSettingsNav").addClass('active');
-  $("#storeNav").addClass('active');
+	$("#storeNav").addClass('active');
 	$("#store_address").wysihtml5();
 	
   // initialize the datatable 

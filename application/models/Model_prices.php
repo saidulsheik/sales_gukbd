@@ -17,9 +17,12 @@ class Model_prices extends CI_Model
 						prices.product_id,
 						prices.purchase_price,
 						prices.sales_price,
+						prices.down_payment,
+						prices.loan_amount,
 						prices.incentive_amt,
 						prices.price_from,
-						prices.price_id
+						prices.price_id,
+						prices.office_sale_price
 					FROM
 						prices
 					LEFT JOIN products ON products.id = prices.product_id
@@ -36,9 +39,12 @@ class Model_prices extends CI_Model
 					prices.product_id,
 					prices.purchase_price,
 					prices.sales_price,
+					prices.down_payment,
+					prices.loan_amount,
 					prices.incentive_amt,
 					prices.price_from,
-					prices.price_id
+					prices.price_id,
+					prices.office_sale_price
 				FROM
 					prices
 				LEFT JOIN products ON products.id = prices.product_id
@@ -115,6 +121,8 @@ class Model_prices extends CI_Model
 					prices.product_id,
 					prices.purchase_price,
 					prices.sales_price,
+					prices.down_payment,
+					prices.loan_amount,
 					prices.incentive_amt,
 					prices.price_from,
 					prices.price_to,

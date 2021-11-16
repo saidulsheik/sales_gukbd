@@ -13,6 +13,7 @@ class Users extends Admin_Controller
 		$this->load->model('model_branch');
 		$this->load->model('model_area');
 		$this->load->model('model_zone');
+		$this->load->model('model_businessgroup');
 	}
 
 	
@@ -135,6 +136,7 @@ class Users extends Admin_Controller
         	$this->data['all_branch'] =  $this->model_branch->getBranches();
         	$this->data['all_area'] =  $this->model_area->getArea();
         	$this->data['all_zone'] =  $this->model_zone->getZone();
+			$this->data['groupHeads'] = $this->model_businessgroup->getActiveBusinessGroup();   
             $this->render_template('users/create', $this->data);
         }	
 

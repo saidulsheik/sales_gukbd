@@ -50,6 +50,7 @@
               <tr>
                 <th>#</th>
                 <th>Brand Name</th>
+                <th>Group Name</th>
                 <th>Status</th>
                 <?php if(in_array('updateBrand', $user_permission) || in_array('deleteBrand', $user_permission)): ?>
                   <th>Action</th>
@@ -92,7 +93,15 @@
             <input type="text" class="form-control" id="brand_name" name="brand_name" placeholder="Enter brand name" autocomplete="off">
           </div>
 
-          
+          <div class="form-group">
+            <label for="group_code">Select Group</label>
+            <select class="form-control select_group" id="group_code" name="group_code" style="width: 100%; margin-top: -8px !important;" required>
+              <option value="">Select Group</option>
+              <?php foreach ($businessGroups as $k => $v): ?>
+                <option value="<?php echo $v['id'] ?>"><?php echo $v['group_name'] ?></option>
+              <?php endforeach ?>
+            </select>
+          </div> 
           
           <div class="form-group">
             <label for="status">Status</label>
@@ -137,7 +146,14 @@
             <input type="hidden" class="form-control" id="old_brand_name" name="old_brand_name"  autocomplete="off">
           </div>
 
-           
+           <div class="form-group">
+              <label for="edit_group_code">Select Group</label>
+              <select class="form-control select_group" id="edit_group_code" name="edit_group_code" style="width: 100%; margin-top: -8px !important;" required>
+                <?php foreach ($businessGroups as $k => $v): ?>
+                  <option value="<?php echo $v['id'] ?>"><?php echo $v['group_name'] ?></option>
+                <?php endforeach ?>
+              </select>
+          </div> 
 
           <div class="form-group">
             <label for="edit_status">Status</label>
@@ -273,6 +289,7 @@ function editBrand(id)
 
       $("#edit_brand_name").val(response.brand_name);
       $("#old_brand_name").val(response.brand_name);
+      $("#edit_group_code").val(response.group_code);
       $("#edit_status").val(response.status);
 
       // submit the edit from 

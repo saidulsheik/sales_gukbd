@@ -171,7 +171,19 @@
 																	<input type="checkbox" name="permission[]" id="permission" class="minimal" value="deleteBranch" <?php if($serialize_permission) { if(in_array( 'deleteBranch', $serialize_permission)) { echo "checked"; } } ?>> </td>
 															</tr>
 															<!-- Branch Permission Edit End -->
-															
+															<!-- Business Group Permission -->
+															<tr>
+																<td>Business Group</td>
+																<td>
+																	<input type="checkbox" name="permission[]" id="permission" class="minimal" value="createBusinessGroup" <?php if($serialize_permission) { if(in_array( 'createBusinessGroup', $serialize_permission)) { echo "checked"; } } ?>> </td>
+																<td>
+																	<input type="checkbox" name="permission[]" id="permission" class="minimal" value="updateBusinessGroup" <?php if($serialize_permission) { if(in_array( 'updateBusinessGroup', $serialize_permission)) { echo "checked"; } } ?>> </td>
+																<td>
+																	<input type="checkbox" name="permission[]" id="permission" class="minimal" value="viewBusinessGroup" <?php if($serialize_permission) { if(in_array( 'viewBusinessGroup', $serialize_permission)) { echo "checked"; } } ?>> </td>
+																<td>
+																	<input type="checkbox" name="permission[]" id="permission" class="minimal" value="deleteBusinessGroup" <?php if($serialize_permission) { if(in_array( 'deleteBusinessGroup', $serialize_permission)) { echo "checked"; } } ?>> </td>
+															</tr>
+															<!-- Business Group Permission End-->
 															
 															<!-- Vendors Permission -->
 															<tr>

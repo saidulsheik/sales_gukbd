@@ -40,7 +40,7 @@ class Auth extends Admin_Controller
 				echo '</pre>';
 				exit;  */
            		if($login) {
-					$menuArray = $this->model_auth->getRoleWiseMenu($login['role_id']);
+					//$menuArray = $this->model_auth->getRoleWiseMenu($login['role_id']);
 					/* echo '<pre>';
 					print_r($menuArray);
 					echo '</pre>';
@@ -62,9 +62,9 @@ class Auth extends Admin_Controller
 							'can_transfer'  			=> $login['can_transfer'],
 							'allow_transfer_branches'  	=> $login['allow_transfer_branches'],
 							'logged_in' 				=> TRUE,
-							'mainMenu' 					=> $menuArray['mainMenu'],
+							/*'mainMenu' 					=> $menuArray['mainMenu'],
 							'subMenu' 					=> $menuArray['subMenu'],
-							'menuPermissionArray' 		=> $menuArray['menuPermissionArray']
+							'menuPermissionArray' 		=> $menuArray['menuPermissionArray']*/
 					);
 					/* echo '<pre>';
 					print_r($logged_in_sess);

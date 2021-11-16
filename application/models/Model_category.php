@@ -21,9 +21,12 @@ class Model_category extends CI_Model
 			$sql = "SELECT
 						categories.id,
 						categories.category_name,
-						categories.status
+						categories.group_code,
+						categories.status,
+						tbl_group_head.group_name
 					FROM
-						categories WHERE categories.id=? ORDER BY id DESC";
+						categories
+					LEFT JOIN tbl_group_head ON tbl_group_head.id = categories.group_code WHERE categories.id=?";
 			$query = $this->db->query($sql, array($id));
 			return $query->row_array();
 		}
@@ -31,9 +34,12 @@ class Model_category extends CI_Model
 		$sql = "SELECT
 					categories.id,
 					categories.category_name,
-					categories.status
+					categories.group_code,
+					categories.status,
+					tbl_group_head.group_name
 				FROM
-					categories ORDER BY id DESC";
+					categories
+				LEFT JOIN tbl_group_head ON tbl_group_head.id = categories.group_code";
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
@@ -58,19 +64,9 @@ class Model_category extends CI_Model
 	public function remove($id)
 	{
 		if($id) {
-
-			$return_array=array();
-			$sql = "SELECT COUNT(*) as total FROM products WHERE category_id = ?";
-			$query = $this->db->query($sql, array($id));
-			$data=$query->result_array();
-			
-			if($data[0]['total'] > 0){
-				return false;
-			}else{
-				$this->db->where('id', $id);
-				$delete = $this->db->delete('categories');
-				return true;
-			}
+			$this->db->where('id', $id);
+			$delete = $this->db->delete('categories');
+			return ($delete == true) ? true : false;
 		}
 	}
 

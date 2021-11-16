@@ -38,7 +38,11 @@
           <button class="btn btn-primary" data-toggle="modal" data-target="#addBrandModal">Add Receive</button>
           <br /> <br />
         <?php endif; ?>
-
+        <?php 
+          echo '<pre>';
+          print_r($_SESSION);
+          echo '</pre>';
+        ?>
         <div class="box">
           <div class="box-header">
             <h3 class="box-title">Manage Product Receive</h3>

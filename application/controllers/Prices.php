@@ -66,6 +66,8 @@ class Prices extends Admin_Controller
 				$value['category_name'],
 				$value['purchase_price'],
 				$value['sales_price'],
+				$value['down_payment'],
+				$value['loan_amount'],
 				$value['incentive_amt'],
 				
 				$buttons
@@ -125,7 +127,10 @@ class Prices extends Admin_Controller
 					'product_id' 		=> $this->input->post('product_id'),
 					'purchase_price' 	=> $this->input->post('purchase_price'),
 					'sales_price' 		=> $this->input->post('sales_price'),	
+					'down_payment' 		=> $this->input->post('down_payment'),	
+					'loan_amount' 		=> $this->input->post('loan_amount'),	
 					'incentive_amt' 	=> $this->input->post('incentive_amt'),	
+					'office_sale_price' => $this->input->post('office_sale_price'),	
 					'price_from' 		=> $this->input->post('price_from'),	
 					'price_status' 		=> 1,
 					'created_by' 		=> $created_by
@@ -174,7 +179,10 @@ class Prices extends Admin_Controller
 		if($price_id) {
 			$this->form_validation->set_rules('edit_purchase_price', 'Purchase Price', 'trim|required');
 			$this->form_validation->set_rules('edit_sales_price', 'Sales Price', 'trim|required');
+			$this->form_validation->set_rules('edit_down_payment', 'Down Payment', 'trim|required');
+			$this->form_validation->set_rules('edit_loan_amount', 'Loan Amount', 'trim|required');
 			$this->form_validation->set_rules('edit_incentive_amt', 'Incentive Amount', 'trim|required');
+			$this->form_validation->set_rules('edit_office_sale_price', 'Office Sales Price', 'trim|required');
 			$this->form_validation->set_rules('edit_price_from', 'Price Effective Date', 'trim|required');
 			$this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
 
@@ -184,7 +192,10 @@ class Prices extends Admin_Controller
 					'product_id' 		=> $this->input->post('edit_product_id'),
 					'purchase_price' 	=> $this->input->post('edit_purchase_price'),
 					'sales_price' 		=> $this->input->post('edit_sales_price'),	
-					'incentive_amt' 	=> $this->input->post('edit_incentive_amt'),
+					'down_payment' 		=> $this->input->post('edit_down_payment'),	
+					'loan_amount' 		=> $this->input->post('edit_loan_amount'),	
+					'incentive_amt' 	=> $this->input->post('edit_incentive_amt'),	
+					'office_sale_price' => $this->input->post('edit_office_sale_price'),	
 					'price_from' 		=> $this->input->post('edit_price_from'),	
 					'price_status' 		=> 1,
 					'created_by' 		=> $created_by

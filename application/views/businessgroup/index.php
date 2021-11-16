@@ -1,14 +1,16 @@
+
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
       Manage
-      <small>Vendors</small>
+      <small>Business Group</small>
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li class="active">Vendors</li>
+      <li class="active">Business Group</li>
     </ol>
   </section>
 
@@ -32,31 +34,28 @@
           </div>
         <?php endif; ?>
 
-        <?php if(in_array('createSupplier', $user_permission)): ?>
-          <button class="btn btn-primary" data-toggle="modal" data-target="#addSupplierModel">Add Vendors</button>
+        <?php if(in_array('createCategory', $user_permission)): ?>
+          <button class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add New Group</button>
           <br /> <br />
         <?php endif; ?>
 
         <div class="box">
           <div class="box-header">
-            <h3 class="box-title">Manage Vendors</h3>
+            <h3 class="box-title">Manage  Group</h3>
           </div>
           <!-- /.box-header -->
           <div class="box-body">
             <table id="manageTable" class="table table-bordered table-striped">
               <thead>
               <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Addrress</th>
-                <th>Mobile</th>
                 <th>Group Name</th>
                 <th>Status</th>
-                <?php if(in_array('updateSupplier', $user_permission) || in_array('deleteSupplier', $user_permission)): ?>
+                <?php if(in_array('updateBusinessGroup', $user_permission) || in_array('deleteBusinessGroup', $user_permission)): ?>
                   <th>Action</th>
                 <?php endif; ?>
               </tr>
               </thead>
+
             </table>
           </div>
           <!-- /.box-body -->
@@ -73,60 +72,38 @@
 </div>
 <!-- /.content-wrapper -->
 
-<?php if(in_array('createSupplier', $user_permission)): ?>
-<!-- create Supplier modal -->
-<div class="modal fade" tabindex="-1" role="dialog" id="addSupplierModel">
+<?php if(in_array('createBusinessGroup', $user_permission)): ?>
+<!-- create brand modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="addModal">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Add Vendor</h4>
+        <h4 class="modal-title">Add Business Group</h4>
       </div>
-      <form role="form" action="<?php echo base_url('suppliers/create') ?>" method="post" id="createSupplierForm">
+
+      <form role="form" action="<?php echo base_url('businessgroup/create') ?>" method="post" id="createForm">
+
         <div class="modal-body">
-          <div class="form-group">
-            <label for="vendor_name">Vendor Name</label>
-            <input type="text" class="form-control" id="vendor_name" name="vendor_name" placeholder="Enter Vendor Name" autocomplete="off">
-          </div>
 
           <div class="form-group">
-            <label for="vendor_email">Vendor Email</label>
-            <input type="text" class="form-control" id="vendor_email" name="vendor_email" placeholder="Enter Vendor Email" autocomplete="off">
+            <label for="group_name">Category Name</label>
+            <input type="text" class="form-control" id="group_name" name="group_name" placeholder="Enter Group Name" autocomplete="off">
           </div>
-
           <div class="form-group">
-            <label for="address">Vendor Address</label>
-            <textarea class="form-control" name="address" id="address" cols="10" rows="2"></textarea>
+            <label for="status">Status</label>
+            <select class="form-control" id="status" name="status">
+              <option value="1">Active</option>
+              <option value="0">Inactive</option>
+            </select>
           </div>
-
-          <div class="form-group">
-            <label for="phone">Vendor Mobile No.</label>
-            <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter Vendor Mobile No" autocomplete="off">
-          </div>
-
-			<div class="form-group">
-			  <label for="group_code">Select Group</label>
-			  <select class="form-control select_group" id="group_code" name="group_code" style="width: 100%; margin-top: -8px !important;" required>
-				<option value="">Select Group</option>
-				<?php foreach ($businessGroups as $k => $v): ?>
-				  <option value="<?php echo $v['id'] ?>"><?php echo $v['group_name'] ?></option>
-				<?php endforeach ?>
-			  </select>
-			</div> 
-			<div class="form-group">
-				<label for="status">Status</label>
-				<select class="form-control" id="status" name="status">
-				  <option value="1">Active</option>
-				  <option value="0">Inactive</option>
-				</select>
-			</div>
-
-
         </div>
+
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary">Save changes</button>
         </div>
+
       </form>
 
 
@@ -135,71 +112,59 @@
 </div><!-- /.modal -->
 <?php endif; ?>
 
-<?php if(in_array('updateSupplier', $user_permission)): ?>
-<!-- edit Supplier modal -->
-<div class="modal fade" tabindex="-1" role="dialog" id="editSupplierModal">
+<?php if(in_array('updateBusinessGroup', $user_permission)): ?>
+<!-- edit brand modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="editModal">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Edit Vendor</h4>
+        <h4 class="modal-title">Edit Business Group</h4>
       </div>
-      <form role="form" action="<?php echo base_url('suppliers/update') ?>" method="post" id="updateSupplierForm">
+
+      <form role="form" action="<?php echo base_url('businessgroup/update') ?>" method="post" id="updateForm">
+
         <div class="modal-body">
           <div id="messages"></div>
 
           <div class="form-group">
-            <label for="edit_vendor_name">Vendor Name</label>
-            <input type="text" class="form-control" id="edit_vendor_name" name="edit_vendor_name" placeholder="Enter Vendor Name" autocomplete="off">
-            <input type="hidden" class="form-control" id="old_vendor_name" name="old_vendor_name"  autocomplete="off">
+            <label for="edit_group_name">Group  Name</label>
+            <input type="text" class="form-control" id="edit_group_name" name="edit_group_name" placeholder="Enter Group Name" autocomplete="off">
+            <input type="hidden" class="form-control" id="old_group_name" name="old_group_name"  autocomplete="off">
           </div>
-
           <div class="form-group">
-            <label for="edit_vendor_email">Vendor Email</label>
-            <input type="text" class="form-control" id="edit_vendor_email" name="edit_vendor_email" placeholder="Enter Vendor Email" autocomplete="off">
-            <input type="hidden" class="form-control" id="old_vendor_email" name="old_vendor_email"  autocomplete="off">
+            <label for="edit_status">Status</label>
+            <select class="form-control" id="edit_status" name="edit_status">
+              <option value="1">Active</option>
+              <option value="2">Inactive</option>
+            </select>
           </div>
-
-          <div class="form-group">
-            <label for="edit_address">Vendor Address</label>
-            <textarea class="form-control" name="edit_address" id="edit_address" cols="10" rows="2"></textarea>
-          </div>
-
-          <div class="form-group">
-            <label for="edit_phone">Vendor Mobile No.</label>
-            <input type="text" class="form-control" id="edit_phone" name="edit_phone" placeholder="Enter Phone Number" autocomplete="off">
-          </div>
-		  
-		  	<div class="form-group">
-			  <label for="edit_group_code">Select Group</label>
-			  <select class="form-control select_group" id="edit_group_code" name="edit_group_code" style="width: 100%; margin-top: -8px !important;" required>
-				<?php foreach ($businessGroups as $k => $v): ?>
-				  <option value="<?php echo $v['id'] ?>"><?php echo $v['group_name'] ?></option>
-				<?php endforeach ?>
-			  </select>
-			</div> 
-			
         </div>
+
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary">Save changes</button>
         </div>
+
       </form>
+
+
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <?php endif; ?>
 
-<?php if(in_array('deleteSupplier', $user_permission)): ?>
-<!-- remove Supplier modal -->
-<div class="modal fade" tabindex="-1" role="dialog" id="removeSupplierModal">
+<?php if(in_array('deleteCategory', $user_permission)): ?>
+<!-- remove brand modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="removeModal">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Remove Supplier</h4>
+        <h4 class="modal-title">Remove Business Group</h4>
       </div>
-      <form role="form" action="<?php echo base_url('suppliers/remove') ?>" method="post" id="removeSupplierForm">
+
+      <form role="form" action="<?php echo base_url('category/remove') ?>" method="post" id="removeForm">
         <div class="modal-body">
           <p>Do you really want to remove?</p>
         </div>
@@ -216,22 +181,21 @@
 <?php endif; ?>
 
 
-
 <script type="text/javascript">
 var manageTable;
 
 $(document).ready(function() {
 $("#mainSettingsNav").addClass('active');
-  $("#manageVendors").addClass('active');
-$(".select_group").select2();
+  $("#manageBusinessGroup").addClass('active');
+  
   // initialize the datatable 
   manageTable = $('#manageTable').DataTable({
-    'ajax': 'fetchSupplierData',
+    'ajax': 'fetchBusinessGroupData',
     'order': []
   });
 
   // submit the create from 
-  $("#createSupplierForm").unbind('submit').on('submit', function() {
+  $("#createForm").unbind('submit').on('submit', function() {
     var form = $(this);
 
     // remove the text-danger
@@ -243,18 +207,22 @@ $(".select_group").select2();
       data: form.serialize(), // /converting the form data into array and sending it to server
       dataType: 'json',
       success:function(response) {
+
         manageTable.ajax.reload(null, false); 
+
         if(response.success === true) {
           $("#messages").html('<div class="alert alert-success alert-dismissible" role="alert">'+
             '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'+
             '<strong> <span class="glyphicon glyphicon-ok-sign"></span> </strong>'+response.messages+
           '</div>');
+
+
           // hide the modal
-          $("#addSupplierModel").modal('hide');
+          $("#addModal").modal('hide');
 
           // reset the form
-          $("#createSupplierForm")[0].reset();
-          $("#createSupplierForm .form-group").removeClass('has-error').removeClass('has-success');
+          $("#createForm")[0].reset();
+          $("#createForm .form-group").removeClass('has-error').removeClass('has-success');
 
         } else {
 
@@ -283,27 +251,23 @@ $(".select_group").select2();
     return false;
   });
 
-
 });
 
-function editSupplier(id)
+// edit function
+function editFunc(id)
 { 
   $.ajax({
-    url: 'fetchSupplierDataById/'+id,
+    url: 'fetchBusinessGroupById/'+id,
     type: 'post',
     dataType: 'json',
     success:function(response) {
-		console.log(response.email);
-      $("#edit_vendor_name").val(response.vendor_name);
-      $("#old_vendor_name").val(response.vendor_name);
-      $("#edit_vendor_email").val(response.vendor_email);
-      $("#old_vendor_email").val(response.vendor_email);
-      $("#edit_address").text(response.address);
-      $("#edit_phone").val(response.phone);
-      $("#edit_group_code").val(response.group_code);
+
+      $("#edit_group_name").val(response.group_name);
+      $("#old_group_name").val(response.group_name);
+      $("#edit_status").val(response.status);
 
       // submit the edit from 
-      $("#updateSupplierForm").unbind('submit').bind('submit', function() {
+      $("#updateForm").unbind('submit').bind('submit', function() {
         var form = $(this);
 
         // remove the text-danger
@@ -326,19 +290,21 @@ function editSupplier(id)
 
 
               // hide the modal
-              $("#editSupplierModal").modal('hide');
+              $("#editModal").modal('hide');
               // reset the form 
-              $("#updateSupplierForm .form-group").removeClass('has-error').removeClass('has-success');
+              $("#updateForm .form-group").removeClass('has-error').removeClass('has-success');
 
             } else {
 
               if(response.messages instanceof Object) {
                 $.each(response.messages, function(index, value) {
                   var id = $("#"+index);
+
                   id.closest('.form-group')
                   .removeClass('has-error')
                   .removeClass('has-success')
                   .addClass(value.length > 0 ? 'has-error' : 'has-success');
+                  
                   id.after(value);
 
                 });
@@ -359,10 +325,11 @@ function editSupplier(id)
   });
 }
 
-function removeSupplier(id)
+// remove functions 
+function removeFunc(id)
 {
   if(id) {
-    $("#removeSupplierForm").on('submit', function() {
+    $("#removeForm").on('submit', function() {
 
       var form = $(this);
 
@@ -372,7 +339,7 @@ function removeSupplier(id)
       $.ajax({
         url: form.attr('action'),
         type: form.attr('method'),
-        data: { supplier_id:id }, 
+        data: { category_id:id }, 
         dataType: 'json',
         success:function(response) {
 
@@ -385,7 +352,7 @@ function removeSupplier(id)
             '</div>');
 
             // hide the modal
-            $("#removeSupplierModal").modal('hide');
+            $("#removeModal").modal('hide');
 
           } else {
 
@@ -393,7 +360,6 @@ function removeSupplier(id)
               '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'+
               '<strong> <span class="glyphicon glyphicon-exclamation-sign"></span> </strong>'+response.messages+
             '</div>'); 
-			 $("#removeSupplierModal").modal('hide');
           }
         }
       }); 

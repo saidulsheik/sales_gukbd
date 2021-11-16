@@ -22,9 +22,12 @@ class Model_brands extends CI_Model
 			$sql = "SELECT
 					brands.id,
 					brands.brand_name,
-					brands.status
-				FROM brands
-					WHERE brands.id=?";
+					brands.group_code,
+					brands.status,
+					tbl_group_head.group_name
+				FROM
+					brands
+				LEFT JOIN tbl_group_head ON tbl_group_head.id = brands.group_code WHERE brands.id=?";
 			$query = $this->db->query($sql, array($id));
 			return $query->row_array();
 		}
@@ -32,10 +35,12 @@ class Model_brands extends CI_Model
 		$sql = "SELECT
 					brands.id,
 					brands.brand_name,
-					brands.status
+					brands.group_code,
+					brands.status,
+					tbl_group_head.group_name
 				FROM
 					brands
-				 ORDER BY brands.id ASC";
+				LEFT JOIN tbl_group_head ON tbl_group_head.id = brands.group_code ORDER BY brands.id ASC";
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}

@@ -84,18 +84,37 @@ class Model_receive extends CI_Model
 			$purchase_id = $this->db->insert_id();
 		if($is_serialised==1){
 			$purchDetatilsData=array();
+
+			
+			if(!empty($this->input->post('serial'))){
+				$serials=explode(',', $this->input->post('serial'));
+			}
 			$quantity=$this->input->post('quantity');
+			$product_id=$this->input->post('product_id');
+
 			for($i=0; $quantity>$i; $i++){
 				$row_arr=array(
 					'purchase_id'=>$purchase_id,
 					'product_id'=>$this->input->post('product_id'),
 					'quantity'=>1,
+					'is_serialised'=>1,
 					'purchase_price'=>$this->input->post('purchase_price')
 				);
 				array_push($purchDetatilsData,$row_arr);
 			}
 			$insert=$this->db->insert_batch('purchase_details', $purchDetatilsData);
-			
+				
+			$first_id = $this->db->insert_id();
+			$productSerialdata=array();
+			for($i=0; $i<$quantity; $i++){
+				$productSerialdata[$i]=array(
+					'store_id'=>1,
+					'product_id'=>$product_id,
+					'product_serial'=>$serials[$i],
+					'purch_details_id'=>$first_id+$i,
+				);
+			}
+			$insert=$this->db->insert_batch('products_serial', $productSerialdata);
 		}else{
 			$purchDetatilsData=array();
 			$purchDetatilsData=array(
@@ -149,6 +168,7 @@ class Model_receive extends CI_Model
 					'purchase_id'=>$this->input->post('id'),
 					'product_id'=>$this->input->post('product_id'),
 					'quantity'=>1,
+					'is_serialised'=>1,
 					'purchase_price'=>$this->input->post('purchase_price')
 				);
 				array_push($purchDetatilsData,$row_arr);
@@ -156,20 +176,17 @@ class Model_receive extends CI_Model
 			$insert=$this->db->insert_batch('purchase_details', $purchDetatilsData);
 			count($purchDetatilsData);
 			$first_id = $this->db->insert_id();
-			$data=array();
+			$productSerialdata=array();
 			for($i=0; $i<$quantity; $i++){
-				$data[$i]=array(
+				$productSerialdata[$i]=array(
+					'store_id'=>1,
 					'product_id'=>$product_id,
 					'product_serial'=>$serials[$i],
 					'purch_details_id'=>$first_id+$i,
 				);
 			}
-			echo '<pre>';
-			print_r($data);
-			echo '</pre>';
-			exit;
+			$insert=$this->db->insert_batch('products_serial', $productSerialdata);
 		}else{
-			
 			$purchDetatilsData=array();
 			$purchDetatilsData=array(
 				'purchase_id'=>$this->input->post('id'),
@@ -265,7 +282,7 @@ class Model_receive extends CI_Model
 						purchase_details.product_id,
 						purchase_details.quantity,
 						purchase_details.purchase_price,
-						purchase_details.serial_id,
+						purchase_details.is_serialised,
 						products.product_name,
 						products.is_serialised,
 						categories.category_name,
@@ -274,7 +291,7 @@ class Model_receive extends CI_Model
 						purchase_details
 					LEFT JOIN products ON products.id = purchase_details.product_id
 					LEFT JOIN categories ON categories.id = products.category_id
-					LEFT JOIN brands ON brands.id = products.brand_id WHERE purchase_details.purchase_id=?";
+					LEFT JOIN brands ON brands.id = products.brand_id WHERE purchase_details.purchase_id=? ORDER BY purchase_details.id DESC";
 			$query = $this->db->query($sql, array($purchase_id));
 			return $query->result_array();
 		}
@@ -284,7 +301,7 @@ class Model_receive extends CI_Model
 						purchase_details.product_id,
 						purchase_details.quantity,
 						purchase_details.purchase_price,
-						purchase_details.serial_id,
+						purchase_details.is_serialised,
 						products.product_name,
 						products.is_serialised,
 						categories.category_name,
@@ -293,7 +310,7 @@ class Model_receive extends CI_Model
 						purchase_details
 					LEFT JOIN products ON products.id = purchase_details.product_id
 					LEFT JOIN categories ON categories.id = products.category_id
-					LEFT JOIN brands ON brands.id = products.brand_id WHERE purchase_details.purchase_id=(SELECT id FROM purchases WHERE status=0) ";
+					LEFT JOIN brands ON brands.id = products.brand_id WHERE purchase_details.purchase_id=(SELECT id FROM purchases WHERE status=0) ORDER BY purchase_details.id DESC";
 			$query = $this->db->query($sql, array(0));
 			return $query->result_array();
 
@@ -303,7 +320,7 @@ class Model_receive extends CI_Model
 	public function deletePurchaseDetailsByID($purchase_details_id=null, $serial_no=null){
 		if(!empty($purchase_details_id)) {
 			if($serial_no!=0){
-					$this->db->where('id', $purchase_details_id);
+					$this->db->where('purch_details_id', $purchase_details_id);
 					$delete_product_serial = $this->db->delete('products_serial');
 					if($delete_product_serial){
 						$this->db->where('id', $purchase_details_id);

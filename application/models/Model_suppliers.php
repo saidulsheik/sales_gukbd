@@ -25,9 +25,12 @@ class Model_suppliers extends CI_Model
 						vendors.vendor_email,
 						vendors.phone,
 						vendors.address,
-						vendors.status
+						vendors.status,
+						vendors.group_code,
+						tbl_group_head.group_name
 					FROM
-						vendors WHERE vendors.id=? ORDER BY vendors.id DESC";
+						vendors
+					LEFT JOIN tbl_group_head ON tbl_group_head.id = vendors.group_code WHERE vendors.id = ?";
 			$query = $this->db->query($sql, array($id));
 			return $query->row_array();
 		}
@@ -38,9 +41,12 @@ class Model_suppliers extends CI_Model
 					vendors.vendor_email,
 					vendors.phone,
 					vendors.address,
-					vendors.status
+					vendors.status,
+					vendors.group_code,
+					tbl_group_head.group_name
 				FROM
-					vendors";
+					vendors
+				LEFT JOIN tbl_group_head ON tbl_group_head.id = vendors.group_code";
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
@@ -66,7 +72,7 @@ class Model_suppliers extends CI_Model
 	{
 		if($id) {
 			$return_array=array();
-			$sql = "SELECT COUNT(*) as total FROM products WHERE vendor_id = ?";
+			$sql = "SELECT COUNT(*) as total FROM inventory WHERE vendor_id = ?";
 			$query = $this->db->query($sql, array($id));
 			$data=$query->result_array();
 			

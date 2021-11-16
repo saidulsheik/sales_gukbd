@@ -123,7 +123,14 @@
                         <td><input type="checkbox" name="permission[]" id="permission" value="viewBranch" class="minimal"></td>
                         <td><input type="checkbox" name="permission[]" id="permission" value="deleteBranch" class="minimal"></td>
                       </tr>
-					            
+					            <!-- Business Group-->
+					            <tr>
+                        <td>Business Group</td>
+                        <td><input type="checkbox" name="permission[]" id="permission" value="createBusinessGroup" class="minimal"></td>
+                        <td><input type="checkbox" name="permission[]" id="permission" value="updateBusinessGroup" class="minimal"></td>
+                        <td><input type="checkbox" name="permission[]" id="permission" value="viewBusinessGroup" class="minimal"></td>
+                        <td><input type="checkbox" name="permission[]" id="permission" value="deleteBusinessGroup" class="minimal"></td>
+                      </tr>
 					  
 					    <!-- supplier start-->
 						<tr>

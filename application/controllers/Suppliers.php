@@ -9,7 +9,7 @@ class Suppliers extends Admin_Controller
 		$this->not_logged_in();
 		$this->data['page_title'] = 'Suppliers';
 		$this->load->model('model_suppliers');
-		
+		$this->load->model('model_businessgroup');
 	}
 
 	/* 
@@ -20,7 +20,7 @@ class Suppliers extends Admin_Controller
 		if(!in_array('viewSupplier', $this->permission)) {
 			redirect('dashboard', 'refresh');
 		}
-		
+		$this->data['businessGroups'] =$this->model_businessgroup->getActiveBusinessGroup();
 		$this->render_template('suppliers/index', $this->data);
 	}
 
@@ -53,6 +53,7 @@ class Suppliers extends Admin_Controller
 				$value['vendor_email'],
 				$value['address'],
 				$value['phone'],
+				$value['group_name'],
 				$status,
 				$buttons
 			); 
@@ -98,6 +99,7 @@ class Suppliers extends Admin_Controller
         		'vendor_email' 	=> $this->input->post('vendor_email'),
         		'address' 	=> $this->input->post('address'),
         		'phone' 	=> $this->input->post('phone'),
+        		'group_code' 	=> $this->input->post('group_code'),
         		'status' 	=> $this->input->post('status'),
         	);
 
@@ -146,6 +148,7 @@ class Suppliers extends Admin_Controller
 			}
 			$this->form_validation->set_rules('edit_address', 'Supplier Address', 'trim|required');
 			$this->form_validation->set_rules('edit_phone', 'Supplier Mobile', 'trim|required');
+			$this->form_validation->set_rules('edit_group_code', 'Group Code', 'trim|required');
 			$this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
 
 	        if ($this->form_validation->run() == TRUE) {
@@ -154,6 +157,7 @@ class Suppliers extends Admin_Controller
 					'vendor_email' 	=> $this->input->post('edit_vendor_email'),
 					'address' 	=> $this->input->post('edit_address'),
 					'phone' 	=> $this->input->post('edit_phone'),
+					'group_code' 	=> $this->input->post('edit_group_code'),
 					'updated_at' 	=> date("Y-m-d H:i:s"),
 				);
 			
@@ -200,7 +204,7 @@ class Suppliers extends Admin_Controller
 			}
 			else {
 				$response['success'] = false;
-				$response['messages'] = "Can't Delete Supplier information, this Supplier is used Another Table";
+				$response['messages'] = "Can't Delete Supplier information, this Supplier is used in Inventory";
 			}
 		}
 		else {

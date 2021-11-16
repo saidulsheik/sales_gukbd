@@ -49,14 +49,19 @@
 				<table id="manageTable" class="table table-bordered table-striped">
 				  <thead>
 				  <tr>
-            <th>Category</th>
-            <th>Brand</th>
-            <th>Product Name</th>
-            <th>Model</th>					
-            <th>Status</th>
-            <?php if(in_array('updateProduct', $user_permission) || in_array('deleteProduct', $user_permission)): ?>
-              <th>Action</th>
-            <?php endif; ?>
+					<th>Image</th>
+					<th>Product Name</th>
+					<th>Short Name</th>
+					<th>Model</th>
+					<th>Code</th>
+					<th>Brand</th>
+					<th>Category</th>
+					<th>Group</th>
+					<th>Vendor</th>
+					<th>Status</th>
+					<?php if(in_array('updateProduct', $user_permission) || in_array('deleteProduct', $user_permission)): ?>
+					  <th>Action</th>
+					<?php endif; ?>
 				  </tr>
 				  </thead>
 				</table>

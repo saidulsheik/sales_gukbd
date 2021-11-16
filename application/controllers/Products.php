@@ -16,6 +16,7 @@ class Products extends Admin_Controller
 		$this->load->model('model_category');
 		$this->load->model('model_stores');
 		$this->load->model('model_attributes');
+		$this->load->model('model_businessgroup');
 		$this->load->model('model_suppliers');
 	}
 
@@ -48,14 +49,13 @@ class Products extends Admin_Controller
             if(in_array('deleteProduct', $this->permission)) { 
     			$buttons .= ' <button type="button" class="btn btn-default" onclick="removeFunc('.$value['id'].')" data-toggle="modal" data-target="#removeModal"><i class="fa fa-trash"></i></button>';
             }
+			if(!empty($value['product_image'])){
+				$image_url=base_url().'assets/'.$value['product_image'];
+			}else{
+				$image_url=base_url().'assets/images/product_image/demo.png';
+			}
 			
-			// if(!empty($value['product_image'])){
-			// 	$image_url=base_url().'assets/'.$value['product_image'];
-			// }else{
-			// 	$image_url=base_url().'assets/images/product_image/demo.png';
-			// }
-			
-			//$img = '<img src="'.$image_url.'" alt="'.$value['product_name'].'" class="img-circle" width="50" height="50" />';
+			$img = '<img src="'.$image_url.'" alt="'.$value['product_name'].'" class="img-circle" width="50" height="50" />';
 
             $status = ($value['status'] == 1) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
 
@@ -68,10 +68,15 @@ class Products extends Admin_Controller
 
 
 			$result['data'][$key] = array(
-				$value['category_name'],
-				$value['brand_name'],
+				$img,
 				$value['product_name'],
+				$value['product_short_name'],
 				$value['product_model'],
+				$value['product_code'],
+				$value['brand_name'],
+				$value['category_name'],
+				$value['group_name'],
+				$value['vendor_name'],
 				$status,
 				$buttons
 			);
@@ -94,13 +99,16 @@ class Products extends Admin_Controller
             redirect('dashboard', 'refresh');
         }
 
-		
+		$this->form_validation->set_rules('group_code', 'Product Group Name', 'trim|required');
 		$this->form_validation->set_rules('brand_id', 'Prodcut Brand Name', 'trim|required');
 		$this->form_validation->set_rules('category_id', 'Prodcut Category Name', 'trim|required');
 		$this->form_validation->set_rules('product_name', 'Product  Name', 'trim|required');
+        $this->form_validation->set_rules('vendor_id', 'Vendor Name', 'trim|required');
+		$this->form_validation->set_rules('product_short_name', 'Product Short Name', 'trim|required');
 		$this->form_validation->set_rules('product_model', 'Product Model', 'trim|required');
+		$this->form_validation->set_rules('reorder_level', 'Reorder Level', 'trim|required');
 		//$this->form_validation->set_rules('product_color', 'Select Product Color', 'trim|required');
-		//$this->form_validation->set_rules('description', 'Product Description', 'trim|required');
+		$this->form_validation->set_rules('description', 'Product Description', 'trim|required');
 		$this->form_validation->set_rules('is_serialised', 'Select Is Product Serialised?', 'trim|required');
 			
 		
@@ -110,10 +118,16 @@ class Products extends Admin_Controller
 
         	$data = array(
         		'product_name' 			=> $this->input->post('product_name'),
+        		'product_short_name' 	=> $this->input->post('product_short_name'),
         		'product_model' 		=> $this->input->post('product_model'),
+        		'product_code' 			=> substr(uniqid(time(), true), 0, 10),
         		'description' 			=> $this->input->post('description'),
+        		'group_code' 			=> $this->input->post('group_code'),
         		'brand_id' 				=> $this->input->post('brand_id'),
         		'category_id' 			=> $this->input->post('category_id'),
+        		'product_color' 		=> $this->input->post('product_color'),
+        		'reorder_level' 		=> $this->input->post('reorder_level'),
+        		'vendor_id' 		=> $this->input->post('vendor_id'),
         		'is_serialised' 		=> $this->input->post('is_serialised'),
 				'created_on'			=> date("Y-m-d H:i:s A"),
 				'created_by' 			=> $this->session->userdata('user_id'),
@@ -192,7 +206,8 @@ class Products extends Admin_Controller
         		'reorder_level' 		=> $this->input->post('reorder_level')
         	); */
 			$this->data['brand_id'] = $this->model_brands->getActiveBrands();        	
-			$this->data['category_id'] = $this->model_category->getActiveCategroy();      	
+			$this->data['category_id'] = $this->model_category->getActiveCategroy();        	
+			$this->data['group_code'] = $this->model_businessgroup->getActiveBusinessGroup();        	
 			$this->data['vendor_id'] = $this->model_suppliers->getSupplierData(); 
             $this->render_template('products/create', $this->data);
         }	
@@ -244,11 +259,14 @@ class Products extends Admin_Controller
             redirect('dashboard', 'refresh');
         }
 	
-       
+        $this->form_validation->set_rules('group_code', 'Product Group Name', 'trim|required');
 		$this->form_validation->set_rules('brand_id', 'Prodcut Brand Name', 'trim|required');
 		$this->form_validation->set_rules('category_id', 'Prodcut Category Name', 'trim|required');
 		$this->form_validation->set_rules('product_name', 'Product  Name', 'trim|required');
+        $this->form_validation->set_rules('vendor_id', 'Vendor Name', 'trim|required');
+		$this->form_validation->set_rules('product_short_name', 'Product Short Name', 'trim|required');
 		$this->form_validation->set_rules('product_model', 'Product Model', 'trim|required');
+		$this->form_validation->set_rules('reorder_level', 'Reorder Level', 'trim|required');
 		$this->form_validation->set_rules('description', 'Product Description', 'trim|required');
 		$this->form_validation->set_rules('is_serialised', 'Select Is Product Serialised?', 'trim|required');
 
@@ -257,10 +275,16 @@ class Products extends Admin_Controller
             
             $data = array(
         		'product_name' 			=> $this->input->post('product_name'),
+        		'product_short_name' 	=> $this->input->post('product_short_name'),
         		'product_model' 		=> $this->input->post('product_model'),
+        		'product_code' 			=> $this->input->post('product_code'),
         		'description' 			=> $this->input->post('description'),
+				'group_code' 			=> $this->input->post('group_code'),
         		'brand_id' 				=> $this->input->post('brand_id'),
         		'category_id' 			=> $this->input->post('category_id'),
+        		'product_color' 		=> $this->input->post('product_color'),
+        		'reorder_level' 		=> $this->input->post('reorder_level'),
+        		'vendor_id' 			=> $this->input->post('vendor_id'),
         		'is_serialised' 		=> $this->input->post('is_serialised'),
 				'updated_at'			=> date("Y-m-d H:i:s A"),
 				'updated_by' 			=> $this->session->userdata('user_id'),
@@ -361,7 +385,8 @@ class Products extends Admin_Controller
 			$cdata['products_images']=$query_result->result(); */
 			
 			$this->data['brand_id'] = $this->model_brands->getActiveBrands();        	
-			$this->data['category_id'] = $this->model_category->getActiveCategroy();       	
+			$this->data['category_id'] = $this->model_category->getActiveCategroy();        	
+			$this->data['group_code'] = $this->model_businessgroup->getActiveBusinessGroup();        	
 			$this->data['vendor_id'] = $this->model_suppliers->getSupplierData(); 
             $this->data['product_data'] = $this->model_products->getProductData($product_id);
             $this->data['products_images'] = $this->model_products->getProductImages($product_id);
@@ -428,51 +453,5 @@ class Products extends Admin_Controller
 
         echo json_encode($response);
 	}
-
-
-	public function addproduct(){
-		if(!in_array('createProduct', $this->permission)) {
-            redirect('dashboard', 'refresh');
-        }
-		$this->form_validation->set_rules('product', 'Product name', 'trim|required');
-		//$this->form_validation->set_rules('supplier_name', 'Supplier Name', 'trim|required');
-		$this->form_validation->set_rules('supplier_id', 'Supplier Name', 'trim|required');
-		$this->form_validation->set_rules('cost_price', 'Cost Price', 'trim|required');
-		$this->form_validation->set_rules('sale_price', 'Sale Price', 'trim|required');
-		//$this->form_validation->set_rules('serial_no', 'Serial No', 'trim|required|is_unique[inventory.serial_no]');
-		$this->form_validation->set_rules('serial_no', 'Serial No', 'trim|required|callback_serial_no_check');
-        if ($this->form_validation->run() == TRUE) {
-        	$data = array(
-        		'product_id' => $this->input->post('product'),
-        		//'supplier_name' => $this->input->post('supplier_name'),
-        		'supplier_id' => $this->input->post('supplier_id'),
-        		'cost_price' => $this->input->post('cost_price'),
-        		'sale_price' => $this->input->post('sale_price'),
-                'serial_no' => $this->input->post('serial_no'),
-                'buy_date'=>date('Y-m-d'),
-        	);
-            $addProduct = $this->model_products->addProduct($data);
-        	if($addProduct == true) {
-                $this->session->set_flashdata('success', 'Successfully created');
-                $this->session->set_userdata('form_data', $data);
-        		redirect('products/addproduct', 'refresh');
-        	}
-        	else {
-        		$this->session->set_flashdata('errors', 'Error occurred!!');
-        		redirect('products/addproduct', 'refresh');
-        	}
-        }
-        else {
-            $this->data['products'] = $this->model_products->getActiveProductData();
-			$this->data['brands'] = $this->model_brands->getActiveBrands();        	
-			$this->data['category'] = $this->model_category->getActiveCategroy();        	
-			$this->data['stores'] = $this->model_stores->getActiveStore(); 
-			$this->data['suppliers'] = $this->model_suppliers->getSupplierData(); 
-            $this->render_template('products/add', $this->data);
-        }
-    }
-
-
-
 
 }

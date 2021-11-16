@@ -112,7 +112,13 @@
 
           
 
-          
+          <?php if(in_array('createStore', $user_permission) || in_array('updateStore', $user_permission) || in_array('viewStore', $user_permission) || in_array('deleteStore', $user_permission)): ?>
+            <li id="storeNav">
+              <a href="<?php echo base_url('stores/') ?>">
+                <i class="fa fa-files-o"></i> <span>Stores</span>
+              </a>
+            </li>
+          <?php endif; ?>
 
           <?php if(in_array('createAttribute', $user_permission) || in_array('updateAttribute', $user_permission) || in_array('viewAttribute', $user_permission) || in_array('deleteAttribute', $user_permission)): ?>
           <li id="attributeNav">
@@ -165,15 +171,12 @@
             <li class="treeview" id="mainProductReceiveNav">
               <a href="#">
                 <i class="fa fa-cart-plus" aria-hidden="true"></i>
-                <span>Products Buy/Receive</span>
+                <span>Receive Products</span>
                 <span class="pull-right-container">
                   <i class="fa fa-angle-left pull-right"></i>
                 </span>
               </a>
               <ul class="treeview-menu">
-                 <?php if(in_array('createProduct', $user_permission)): ?>
-                  <li id="addNewProductNav"><a href="<?php echo base_url('products/addproduct') ?>"><i class="fa fa-circle-o"></i> Add Basic/Smart Product</a></li>
-                <?php endif; ?>
                 <?php if(in_array('createProductReceive', $user_permission)): ?>
                   <li id="createProductReceiveNav"><a href="<?php echo base_url('receive/create') ?>"><i class="fa fa-circle-o"></i>Product Receive</a></li>
                 <?php endif; ?>
@@ -194,7 +197,7 @@
 				in_array('createDemandConfiguration', $user_permission) || 
 				in_array('updateDemandConfiguration', $user_permission) || 
 				in_array('viewDemandConfiguration', $user_permission) || 
-				in_array('deleteDemandConfiguration', $user_permission) 
+				in_array('deleteDemandConfiguration', $user_permission)
 			  
 			  ): ?>
             <li class="treeview" id="mainDemandeNav">
@@ -252,17 +255,7 @@
 
         
 		<!-- All Settings-->
-		 <?php if(
-              in_array('createGroup', $user_permission) || 
-              in_array('updateGroup', $user_permission) ||
-              in_array('viewGroup', $user_permission) || 
-              in_array('deleteGroup', $user_permission) ||
-              in_array('createStore', $user_permission) ||
-              in_array('updateStore', $user_permission) ||
-              in_array('viewStore', $user_permission) ||
-              in_array('deleteStore', $user_permission) 
-            ): 
-      ?>
+		 <?php if(in_array('createGroup', $user_permission) || in_array('updateGroup', $user_permission) || in_array('viewGroup', $user_permission) || in_array('deleteGroup', $user_permission)): ?>
             <li class="treeview" id="mainSettingsNav">
               <a href="#">
                 <!--i class="fa fa-files-o"></i-->
@@ -274,14 +267,10 @@
               </a>
 			  
               <ul class="treeview-menu">
-              	<!-- Manage Stores-->
-              <?php if(in_array('createStore', $user_permission) || in_array('updateStore', $user_permission) || in_array('viewStore', $user_permission) || in_array('deleteStore', $user_permission)): ?>
-                <li id="storeNav">
-                  <a href="<?php echo base_url('stores/') ?>"><i class="fa fa-circle-o"></i> <span>Stores</span> </a>
-                </li>
-              <?php endif; ?>
-			      
-               
+				<!-- Manage Branch-->
+                <?php if(in_array('createBranch', $user_permission) || in_array('updateBranch', $user_permission) || in_array('viewBranch', $user_permission) || in_array('deleteBranch', $user_permission)): ?>
+                <li id="manageBranchNav"><a href="<?php echo base_url('branch/') ?>"><i class="fa fa-circle-o"></i> Manage Branches</a></li>
+                <?php endif; ?>
 				
                   <!-- Manage Brand -->
                   <?php if(in_array('createBrand', $user_permission) || in_array('updateBrand', $user_permission) || in_array('viewBrand', $user_permission) || in_array('deleteBrand', $user_permission)): ?>
@@ -296,7 +285,14 @@
                     </li>
                   <?php endif; ?>
                   
-                 
+                  <!-- Manage Business Group-->
+                  <?php if(in_array('createBusinessGroup', $user_permission) || in_array('updateBusinessGroup', $user_permission) || in_array('viewBusinessGroup', $user_permission) || in_array('deleteBusinessGroup', $user_permission)): ?>
+                    <li id="manageBusinessGroup">
+                      <a href="<?php echo base_url('businessgroup/') ?>">
+                      <i class="fa fa-circle-o"></i> <span>Business Group</span>
+                      </a>
+                    </li>
+                  <?php endif; ?>
 
                   <!-- Manage Vendors/Suppliers -->
                   <?php if(in_array('createSupplier', $user_permission) || in_array('updateSupplier', $user_permission) || in_array('viewSupplier', $user_permission) || in_array('deleteSupplier', $user_permission)): ?>

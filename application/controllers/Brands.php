@@ -10,7 +10,7 @@ class Brands extends Admin_Controller
 		$this->not_logged_in();
 		$this->data['page_title'] = 'Brands';
 		$this->load->model('model_brands');
-	
+		$this->load->model('model_businessgroup');
 	}
 
 	/* 
@@ -21,7 +21,8 @@ class Brands extends Admin_Controller
 		if(!in_array('viewBrand', $this->permission)) {
 			redirect('dashboard', 'refresh');
 		}
-		
+
+		$this->data['businessGroups'] =$this->model_businessgroup->getActiveBusinessGroup();
 		$this->render_template('brands/index', $this->data);
 	}
 
@@ -50,6 +51,7 @@ class Brands extends Admin_Controller
 			$result['data'][$key] = array(
 				$i,
 				$value['brand_name'].'('.$value['id'].')',
+				$value['group_name'],
 				$status,
 				$buttons
 			);
@@ -88,13 +90,15 @@ class Brands extends Admin_Controller
 
 		$response = array();
 		$this->form_validation->set_rules('brand_name', 'Brand Name', 'trim|required|is_unique[brands.brand_name]');
+		$this->form_validation->set_rules('group_code', 'group_code', 'trim|required');
 		$this->form_validation->set_rules('status', 'status', 'trim|required');
 
 		$this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
 
         if ($this->form_validation->run() == TRUE) {
         	$data = array(
-        		'brand_name' => strtoupper($this->input->post('brand_name')),
+        		'brand_name' => $this->input->post('brand_name'),
+        		'group_code' => $this->input->post('group_code'),	
         		'status' => $this->input->post('status'),	
         	);
 
@@ -141,11 +145,13 @@ class Brands extends Admin_Controller
 			}
 
 			$this->form_validation->set_rules('edit_status', 'status', 'trim|required');
+			$this->form_validation->set_rules('edit_group_code', 'group_code', 'trim|required');
 			$this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
 
 	        if ($this->form_validation->run() == TRUE) {
 	        	$data = array(
-					'brand_name' => strtoupper($this->input->post('edit_brand_name')),
+					'brand_name' => $this->input->post('edit_brand_name'),
+					'group_code' => $this->input->post('edit_group_code'),	
 					'status' => $this->input->post('edit_status'),	
 				);
 

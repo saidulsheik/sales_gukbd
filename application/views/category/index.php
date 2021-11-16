@@ -49,6 +49,7 @@
               <thead>
               <tr>
                 <th>Category Name</th>
+                <th>Group Name</th>
                 <th>Status</th>
                 <?php if(in_array('updateCategory', $user_permission) || in_array('deleteCategory', $user_permission)): ?>
                   <th>Action</th>
@@ -91,7 +92,15 @@
             <input type="text" class="form-control" id="category_name" name="category_name" placeholder="Enter category name" autocomplete="off">
           </div>
 
-          	
+          	<div class="form-group">
+              <label for="group_code">Select Group</label>
+              <select class="form-control select_group" id="group_code" name="group_code" style="width: 100%; margin-top: -8px !important;" required>
+                <option value="">Select Group</option>
+                <?php foreach ($businessGroups as $k => $v): ?>
+                  <option value="<?php echo $v['id'] ?>"><?php echo $v['group_name'] ?></option>
+                <?php endforeach ?>
+              </select>
+            </div> 
             
             
 			  <div class="form-group">
@@ -137,7 +146,14 @@
             <input type="hidden" class="form-control" id="old_category_name" name="old_category_name" placeholder="Enter category name" autocomplete="off">
           </div>
 
-          
+          <div class="form-group">
+              <label for="edit_group_code">Select Group</label>
+              <select class="form-control select_group" id="edit_group_code" name="edit_group_code" style="width: 100%; margin-top: -8px !important;" required>
+                <?php foreach ($businessGroups as $k => $v): ?>
+                  <option value="<?php echo $v['id'] ?>"><?php echo $v['group_name'] ?></option>
+                <?php endforeach ?>
+              </select>
+          </div> 
 
           <div class="form-group">
             <label for="edit_active">Status</label>
@@ -271,6 +287,7 @@ function editFunc(id)
 
       $("#edit_category_name").val(response.category_name);
       $("#old_category_name").val(response.category_name);
+      $("#edit_group_code").val(response.group_code);
       $("#edit_status").val(response.status);
 
       // submit the edit from 

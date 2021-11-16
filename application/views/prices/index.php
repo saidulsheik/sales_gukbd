@@ -50,13 +50,15 @@
 					<thead>
 						<tr>
 							<th>#</th>
-              <th>Category Name</th>
+							<th>Product Name</th>
 							<th>Brand Name</th>
-              <th>Product Name</th>
 							<th>Price Effective Date</th>
+							<th>Category Name</th>
 							<th>Purchase Price</th>
 							<th>Sales Price</th>
-              <th>Incentive Amount</th>
+							<th>Down Payment</th>
+							<th>Loan Amount</th>
+							<th>Incentive Amount</th>
 							<?php if(in_array('viewProductPrice', $user_permission) || in_array('updateProductPrice', $user_permission)): ?>
 							  <th>Action</th>
 							<?php endif; ?>
@@ -118,14 +120,25 @@
            <input type="number" value="0" name="sales_price" id="sales_price" class="form-control" required>
           </div> 
 
-		
+		  <div class="form-group">
+            <label for="down_payment">Down Payment</label>
+           <input type="number" value="0" name="down_payment" id="down_payment" class="form-control" required>
+          </div>
+		  
+		   <div class="form-group">
+            <label for="loan_amount">Loan Amount</label>
+           <input type="number" value="0" name="loan_amount" id="loan_amount" class="form-control" required>
+          </div>
 		  
 		  <div class="form-group">
             <label for="incentive_amt">Incentive Amount</label>
            <input type="number" value="0" name="incentive_amt" id="incentive_amt" class="form-control" required>
-      </div>
+          </div>
 		  
-		
+		  <div class="form-group">
+            <label for="office_sale_price">Office Sales Price</label>
+           <input type="number" value="0" name="office_sale_price" id="office_sale_price" class="form-control" required>
+          </div>
 		  
 		  
           
@@ -209,7 +222,35 @@
 						</td>
 					</tr>
 					
-				
+					<tr>
+						<td>Down Payment</td>
+						<td>
+							<div class="form-group">
+								<input type="text" name="pre_down_payment" id="pre_down_payment" value="" class="form-control" readonly>
+							</div>
+						</td>
+						<td>
+							<div class="form-group">
+								<input type="number" name="edit_down_payment" id="edit_down_payment" class="form-control" required>
+							</div>
+							
+						</td>
+					</tr>
+					
+					<tr>
+						<td>Loan Amount</td>
+						<td>
+							<div class="form-group">
+								<input type="text" value="1000" name="pre_loan_amount" id="pre_loan_amount" class="form-control" readonly>
+							</div>
+						</td>
+						<td>
+							<div class="form-group">
+								<input type="number" name="edit_loan_amount" id="edit_loan_amount"  class="form-control" required>
+							</div>
+							
+						</td>
+					</tr>
 					
 					<tr>
 						<td>Incentive Amount</td>
@@ -224,6 +265,20 @@
 								</div>
 								
 							</td>
+					</tr>
+					<tr>
+						<td>Office Sales Price</td>
+						<td>
+							<div class="form-group">
+								<input type="text" name="pre_office_sale_price" id="pre_office_sale_price" class="form-control" readonly>
+							</div>
+						</td>
+						<td>
+							<div class="form-group">
+								<input type="number" name="edit_office_sale_price" id="edit_office_sale_price" class="form-control" required>
+							</div>
+							
+						</td>
 					</tr>
 					<tr>
 						<td>Price Effective Date</td>

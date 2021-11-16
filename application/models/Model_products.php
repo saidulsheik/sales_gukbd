@@ -13,19 +13,30 @@ class Model_products extends CI_Model
 			$sql = "SELECT
 						products.id,
 						products.product_name,
+						products.product_short_name,
 						products.product_model,
+						products.product_code,
 						products.description,
 						products.is_serialised,
+						products.is_demand,
+						products.reorder_level,
+						products.product_color,
 						brands.id as brand_id,
 						brands.brand_name,
 						categories.id as category_id,
 						categories.category_name,
+						products.status,
 						products.product_image,
-						products.status
+						tbl_group_head.id as group_code,
+						tbl_group_head.group_name,
+						vendors.id as vendor_id,
+						vendors.vendor_name
 					FROM
 						products
 					LEFT JOIN brands ON brands.id = products.brand_id
-					LEFT JOIN categories ON categories.id = products.category_id where products.id = ? ORDER BY products.id DESC";
+					LEFT JOIN categories ON categories.id = products.category_id
+					LEFT JOIN tbl_group_head ON tbl_group_head.id = products.group_code
+					LEFT JOIN vendors ON vendors.id = products.vendor_id where products.id = ? ORDER BY products.id DESC";
 			$query = $this->db->query($sql, array($id));
 			return $query->row_array();
 		}
@@ -33,20 +44,30 @@ class Model_products extends CI_Model
 		$sql = "SELECT
 						products.id,
 						products.product_name,
+						products.product_short_name,
 						products.product_model,
+						products.product_code,
 						products.description,
 						products.is_serialised,
+						products.is_demand,
+						products.reorder_level,
+						products.product_color,
 						brands.id as brand_id,
 						brands.brand_name,
 						categories.id as category_id,
 						categories.category_name,
+						products.status,
 						products.product_image,
-						products.status
+						tbl_group_head.id as group_code,
+						tbl_group_head.group_name,
+						vendors.id as vendor_id,
+						vendors.vendor_name
 				FROM
-					products
+					`products`
 				LEFT JOIN brands ON brands.id = products.brand_id
 				LEFT JOIN categories ON categories.id = products.category_id
-				ORDER BY products.id DESC";
+				LEFT JOIN tbl_group_head ON tbl_group_head.id = products.group_code
+				LEFT JOIN vendors ON vendors.id = products.vendor_id ORDER BY products.id DESC";
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
@@ -76,7 +97,7 @@ class Model_products extends CI_Model
 
 	public function getActiveProductData()
 	{
-		$sql = "SELECT * FROM products WHERE status = ? ORDER BY id DESC";
+		$sql = "SELECT * FROM products WHERE availability = ? ORDER BY id DESC";
 		$query = $this->db->query($sql, array(1));
 		return $query->result_array();
 	}
@@ -114,8 +135,5 @@ class Model_products extends CI_Model
 		$query = $this->db->query($sql, array(1))->result();
 		return $query[0]->total_products;
 	}
-
-
-	
 
 }
